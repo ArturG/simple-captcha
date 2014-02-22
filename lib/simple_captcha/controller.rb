@@ -13,13 +13,13 @@ module SimpleCaptcha #:nodoc
     #   flash[:notice] = "captcha did not match"
     #   redirect_to :action => "myaction"
     #  end
-    def simple_captcha_valid?
+    def simple_captcha_valid?(captcha, captcha_key)
       return true if Rails.env.test?
       
-      if params[:captcha]
-        data = SimpleCaptcha::Utils::simple_captcha_value(params[:captcha_key] || session[:captcha])
-        result = data == params[:captcha].delete(" ").upcase
-        SimpleCaptcha::Utils::simple_captcha_passed!(session[:captcha]) if result
+      if captcha
+        data = SimpleCaptcha::Utils::simple_captcha_value(captcha_key)
+        result = data == captcha.delete(" ").upcase
+        SimpleCaptcha::Utils::simple_captcha_passed!(captcha) if result
         return result
       else
         return false
